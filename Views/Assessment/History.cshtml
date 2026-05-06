@@ -1,0 +1,37 @@
+﻿@model List<AssessmentHistory>
+
+<h2>Your Previous Assessments</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Score</th>
+            <th>Level</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AssessmentDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.TotalScore</td>
+                <td>
+                    @if (item.Level == "Low")
+                    {
+                        <span class="text-success">@item.Level</span>
+                    }
+                    else if (item.Level == "Medium")
+                    {
+                        <span class="text-warning">@item.Level</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">@item.Level</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

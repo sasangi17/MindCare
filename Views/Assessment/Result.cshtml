@@ -1,0 +1,35 @@
+﻿<h2>Your Assessment Result</h2>
+
+<div class="card p-4 text-center">
+    <h3>Total Score: @ViewBag.Score</h3>
+
+    <h2>
+        @if (ViewBag.Level == "Low Stress")
+        {
+            <span class="text-success">@ViewBag.Level</span>
+        }
+        else if (ViewBag.Level == "Medium Stress")
+        {
+            <span class="text-warning">@ViewBag.Level</span>
+        }
+        else
+        {
+            <span class="text-danger">@ViewBag.Level</span>
+        }
+    </h2>
+
+    <p>
+        @if (ViewBag.Level == "Low Stress")
+        {
+            <span>You are doing well. Keep maintaining your mental wellness.</span>
+        }
+        else if (ViewBag.Level == "Medium Stress")
+        {
+            <span>You may need some relaxation and self-care.</span>
+        }
+        else
+        {
+            <span>Consider seeking support or professional guidance.</span>
+        }
+    </p>
+</div>

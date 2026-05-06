@@ -1,0 +1,40 @@
+﻿@model List<MindCare_Pro.Models.Consultation>
+
+<div class="container mt-4">
+
+    <h2>My Appointments</h2>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Fee</th>
+                <th>Status</th>
+                <th>Create Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.DoctorName</td>
+                    <td>@item.AppointmentDate.ToShortDateString()</td>
+                    <td>@item.TimeSlot</td>
+                    <td>@item.Type</td>
+                    <td>Rs. @item.Fee</td>
+                    <td>
+                        <span class="badge bg-warning">
+                            @item.Status
+                        </span>
+                    </td>
+                    <td>@item.CreatedAt.ToString("dd MMM yyyy ")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MindCare_Pro.Areas.Identity.Data;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    // Detect if the current page is an Identity page (Login, Register)
+    var area = ViewContext.RouteData.Values["area"]?.ToString();
+    var page = ViewContext.RouteData.Values["page"]?.ToString();
+
+    // Hide navbar for Identity pages 
+    bool hideNavbar = area == "Identity" && (page == "/Account/Login" || page == "/Account/Register");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MindCare</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MindCare_Pro.styles.css" asp-append-version="true" />
+</head>
+<body>
+
+    @if (!hideNavbar)
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">MindCare</a>
+
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav me-auto">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Assessment" asp-action="Index">Assessment</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Consultation" asp-action="Index">Consultation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Reminder" asp-action="Index">Reminder</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Progress" asp-action="Index">Progress</a>
+                                </li>
+                            }
+                        </ul>
+
+                        <partial name="_LoginPartial.cshtml" />
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+
+    
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    
+    @if (!hideNavbar)
+    {
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2025 - MindCare
+            </div>
+        </footer>
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
