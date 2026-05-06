@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MindCare Admin</title>
+
+    <!-- LOCAL BOOTSTRAP -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css" />
+</head>
+
+<body style="background:#f5f7fb;">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark px-4">
+
+        <!-- LOGO -->
+        <a class="navbar-brand text-white fw-bold"
+           href="/Admin/Dashboard">
+
+            MindCare Admin
+
+        </a>
+
+        <!-- NAVIGATION -->
+        <div class="d-flex align-items-center ms-auto">
+
+            <a class="text-white me-4 text-decoration-none"
+               href="/Admin/Dashboard">
+
+                Dashboard
+
+            </a>
+
+            <a class="text-white me-4 text-decoration-none"
+               href="/Admin/Consultation">
+
+                Consultations
+
+            </a>
+
+            <!-- ADMIN NAME -->
+            <span class="text-white me-3">
+
+                Hello @User.Identity.Name
+
+            </span>
+
+            <!-- LOGOUT -->
+            <form method="post"
+                  asp-area="Identity"
+                  asp-page="/Account/Logout"
+                  asp-route-returnUrl="/Identity/Account/Login"
+
+                <button type="submit"
+                        class="btn btn-outline-light btn-sm">
+
+                    Logout
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container mt-4">
+
+        @RenderBody()
+
+    </div>
+
+    <!-- BOOTSTRAP -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
