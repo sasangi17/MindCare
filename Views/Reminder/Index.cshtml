@@ -1,0 +1,132 @@
+﻿@model List<Reminder>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    .toggle-switch {
+        width: 45px;
+        height: 24px;
+        background: #ddd;
+        border-radius: 20px;
+        position: relative;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .toggle-switch.active {
+            background: #000;
+        }
+
+    .toggle-circle {
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: 0.3s;
+    }
+
+    .toggle-switch.active .toggle-circle {
+        left: 23px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="fw-bold">Wellness Reminders</h2>
+            <p class="text-muted">Set up personalized reminders</p>
+        </div>
+
+        <button class="btn btn-dark px-4" data-bs-toggle="modal" data-bs-target="#addModal">
+            + Add Reminder
+        </button>
+    </div>
+
+    
+    @foreach (var item in Model)
+    {
+        <div class="card p-4 mb-3 shadow-sm rounded-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                
+                <div>
+                    <h5>@item.Title</h5>
+
+                    <div class="text-muted">
+                        @item.ReminderDate.ToString("hh:mm tt")
+
+                        @if (item.IsCompleted)
+                        {
+                            <span class="badge bg-success ms-2">Done</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-dark ms-2">Active</span>
+                        }
+                    </div>
+                </div>
+
+                
+                <div class="d-flex align-items-center gap-3">
+
+                    
+                    <form asp-action="Toggle" method="post">
+                        <input type="hidden" name="id" value="@item.ReminderId" />
+
+                        <div class="toggle-switch @(item.IsCompleted ? "active" : "")"
+                             onclick="this.closest('form').submit();">
+
+                            <div class="toggle-circle"></div>
+                        </div>
+                    </form>
+
+                    
+                    <form asp-action="Delete" method="post"
+                          onsubmit="return confirm('Delete this reminder?');">
+
+                        <input type="hidden" name="id" value="@item.ReminderId" />
+
+                        <button class="btn btn-outline-danger btn-sm">
+                            🗑
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    }
+
+</div>
+
+
+<div class="modal fade" id="addModal">
+    <div class="modal-dialog">
+        <div class="modal-content p-4 rounded-4">
+
+            <h4>Add Reminder</h4>
+
+            <form asp-action="Create" method="post">
+
+                <input name="Title" class="form-control mb-3" placeholder="Title" required />
+
+                <input type="datetime-local" name="ReminderDate" class="form-control mb-3" required />
+
+                <div class="text-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-dark">Create</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

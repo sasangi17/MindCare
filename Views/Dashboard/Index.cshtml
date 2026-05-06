@@ -1,0 +1,206 @@
+﻿@model DashboardViewModel
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4">
+
+    <h2 class="fw-bold">Welcome Back</h2>
+    <p class="text-muted">Here's your mental wellness overview for today</p>
+
+    
+    <div class="card p-4 mb-4 shadow rounded-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h5>Current Mental Health Status</h5>
+                <small class="text-muted">Based on your latest assessment</small>
+            </div>
+
+            <div>
+                <a href="/Assessment/Index" class="btn btn-outline-dark me-2">
+                    Retake Assessment
+                </a>
+
+                <a href="/Assessment/History" class="btn btn-dark">
+                    View My Progress
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-4">
+
+            @if (Model.StressLevel == "High")
+            {
+                <h4 class="text-danger fw-bold">
+                    Critical - Immediate Support Recommended
+                    <span class="badge bg-danger ms-2">Urgent</span>
+                </h4>
+
+                <div class="alert alert-danger mt-3">
+                    We recommend connecting with a mental health professional immediately.
+                    <br />
+                    <a href="/Consultation/Index" class="btn btn-danger mt-2">
+                        Connect with a Doctor Now
+                    </a>
+                </div>
+            }
+            else if (Model.StressLevel == "Medium")
+            {
+                <h4 class="text-warning fw-bold">
+                    Moderate Stress - Take Care
+                </h4>
+            }
+            else
+            {
+                <h4 class="text-success fw-bold">
+                    You are doing well
+                </h4>
+            }
+
+            <p class="text-muted mt-2">
+                Last assessed: @Model.LastAssessmentDate.ToShortDateString()
+            </p>
+        </div>
+    </div>
+
+  
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Assessments</h6>
+                <h3>@Model.TotalAssessments</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Average Score</h6>
+                <h3>@Model.AverageScore.ToString("0.0")</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Sessions</h6>
+                <h3>@Model.TotalConsultations</h3>
+            </div>
+        </div>
+
+    </div>
+
+   
+    <div class="card p-4 mb-4 shadow rounded-4">
+
+        <h5>Mood Trends - Last 7 Records</h5>
+        <small class="text-muted">Track your stress levels over time</small>
+
+        <canvas id="trendChart" height="100"></canvas>
+    </div>
+
+    <div class="card p-4 mb-4 shadow rounded-4">
+
+        <h5>Latest Mental Health Breakdown</h5>
+        <small class="text-muted">Depression, Anxiety, Stress scores</small>
+
+        <canvas id="barChart" height="100"></canvas>
+    </div>
+
+</div>
+
+
+<div class="card p-4 mt-4 shadow rounded-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Pending Reminders</h5>
+
+        <a href="/Reminder/Index" class="btn btn-sm btn-outline-dark">
+            View All
+        </a>
+    </div>
+
+    @if (Model.TodayReminders.Count == 0)
+    {
+        <p class="text-muted">No reminders yet</p>
+    }
+    else
+    {
+        @foreach (var item in Model.TodayReminders)
+        {
+            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+
+                <div>
+                    <strong>@item.Title</strong>
+                    <div class="text-muted small">
+                        @item.ReminderDate.ToString("hh:mm tt")
+                    </div>
+                </div>
+
+                <div>
+                    @if (item.IsCompleted)
+                    {
+                        <span class="badge bg-success">Done</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-dark">Pending</span>
+                    }
+                </div>
+
+            </div>
+        }
+    }
+
+</div>
+
+
+<script>
+
+  
+    new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.WeeklyLabels)),
+            datasets: [{
+                label: 'Total Score',
+                data: @Html.Raw(Json.Serialize(Model.WeeklyScores)),
+                borderColor: 'red',
+                backgroundColor: 'rgba(255,0,0,0.1)',
+                tension: 0.3,
+                fill: true,
+                pointRadius: 5
+            }]
+        }
+    });
+
+  
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Depression', 'Anxiety', 'Stress'],
+            datasets: [{
+                label: 'Score',
+                data: [
+                    @Model.DepressionScore,
+                    @Model.AnxietyScore,
+                    @Model.StressScore
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(54, 162, 235, 0.6)'
+                ],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: 15
+                }
+            }
+        }
+    });
+
+</script>

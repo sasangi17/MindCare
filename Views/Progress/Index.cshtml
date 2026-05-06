@@ -1,0 +1,213 @@
+﻿@model MindCare_Pro.Models.ProgressViewModel
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4">
+
+    <h2 class="fw-bold">Your Progress</h2>
+    <p class="text-muted">Track your mental health journey over time</p>
+
+    <!-- summary cards -->
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Latest Score</h6>
+                <h3>@Model.Scores.LastOrDefault()</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Average</h6>
+                <h3>
+                    @(Model.Scores.Count > 0
+                                        ? Model.Scores.Average().ToString("0.0")
+                                        : "0")
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Best Score</h6>
+                <h3>
+                    @(Model.Scores.Count > 0
+                                        ? Model.Scores.Min()
+                                        : 0)
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 text-center shadow-sm rounded-4">
+                <h6>Status</h6>
+                <h5>
+                    @{
+                        if (Model.Scores.Count >= 2)
+                        {
+                            if (Model.Scores.Last() < Model.Scores.First())
+                            {
+                                <span class="text-success">Improving</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Needs Attention</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">Not enough data</span>
+                        }
+                    }
+                </h5>
+            </div>
+        </div>
+
+    </div>
+
+    <!--  overall trend -->
+    <div class="card p-4 mb-4 shadow rounded-4">
+        <h5>Total Score Trend</h5>
+        <canvas id="totalChart" height="100"></canvas>
+    </div>
+
+    <!--  separate charts -->
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow rounded-4">
+                <h6 class="text-center">Depression</h6>
+                <canvas id="depressionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow rounded-4">
+                <h6 class="text-center">Anxiety</h6>
+                <canvas id="anxietyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow rounded-4">
+                <h6 class="text-center">Stress</h6>
+                <canvas id="stressChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!--  recent table -->
+    <div class="card p-4 mt-4 shadow rounded-4">
+
+        <h5>Recent Assessments</h5>
+
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Score</th>
+                    <th>Level</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (int i = Model.Scores.Count - 1; i >= 0 && i >= Model.Scores.Count - 5; i--)
+                {
+                    var score = Model.Scores[i];
+
+                    string level = score <= 20 ? "Low"
+                    : score <= 30 ? "Medium"
+                    : "High";
+
+                    <tr>
+                        <td>@Model.Dates[i]</td>
+                        <td>@score</td>
+                        <td>
+                            @if (level == "Low")
+                            {
+                                <span class="badge bg-success">Low</span>
+                            }
+                            else if (level == "Medium")
+                            {
+                                <span class="badge bg-warning">Medium</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">High</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<!--  chart script -->
+<script>
+
+    var labels = @Html.Raw(Json.Serialize(Model.Dates));
+
+    //  total
+    new Chart(document.getElementById('totalChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Score',
+                data: @Html.Raw(Json.Serialize(Model.Scores)),
+                borderColor: 'blue',
+                backgroundColor: 'rgba(0,0,255,0.1)',
+                tension: 0.3,
+                fill: true
+            }]
+        }
+    });
+
+    //  depression
+    new Chart(document.getElementById('depressionChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Depression',
+                data: @Html.Raw(Json.Serialize(Model.DepressionScores)),
+                borderColor: 'red',
+                tension: 0.3
+            }]
+        }
+    });
+
+    //  anxiety
+    new Chart(document.getElementById('anxietyChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Anxiety',
+                data: @Html.Raw(Json.Serialize(Model.AnxietyScores)),
+                borderColor: 'orange',
+                tension: 0.3
+            }]
+        }
+    });
+
+    //  stress
+    new Chart(document.getElementById('stressChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Stress',
+                data: @Html.Raw(Json.Serialize(Model.StressScores)),
+                borderColor: 'green',
+                tension: 0.3
+            }]
+        }
+    });
+
+</script>
