@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MindCare_Pro.Areas.Identity.Data;
+using MindCare_Pro.Models;
 
 namespace MindCare_Pro.Data;
 
@@ -11,6 +12,9 @@ public class MindCareDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+    public DbSet<Doctor> Doctors { get; set; }
+
+    public DbSet<Consultation> Consultations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

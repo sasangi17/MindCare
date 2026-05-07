@@ -1,0 +1,70 @@
+﻿@model List<MindCare_Pro.Models.Doctor>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="fw-bold">
+        Doctors
+    </h2>
+
+    <a href="/Admin/Doctor/Create"
+       class="btn btn-dark">
+
+        Add Doctor
+
+    </a>
+
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 p-4">
+
+    <table class="table align-middle">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Fee</th>
+                <th width="180"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.Name</td>
+
+                    <td>@item.Specialization</td>
+
+                    <td>
+                        Rs. @item.Fee.ToString("N0")
+                    </td>
+
+                    <td>
+
+                        <a href="/Admin/Doctor/Edit/@item.DoctorId"
+                           class="btn btn-primary btn-sm">
+
+                            Edit
+
+                        </a>
+
+                        <a href="/Admin/Doctor/Delete/@item.DoctorId"
+                           class="btn btn-danger btn-sm">
+
+                            Delete
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

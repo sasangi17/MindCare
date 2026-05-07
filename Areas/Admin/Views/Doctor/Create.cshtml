@@ -1,0 +1,75 @@
+﻿@model MindCare_Pro.Models.Doctor
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card border-0 shadow-sm rounded-4 p-4">
+
+    <h2 class="fw-bold mb-4">
+        Add Doctor
+    </h2>
+
+    <form asp-area="Admin"
+          asp-controller="Doctor"
+          asp-action="Create"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+
+            <label asp-for="Name"
+                   class="form-label">
+            </label>
+
+            <input asp-for="Name"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Specialization"
+                   class="form-label">
+            </label>
+
+            <input asp-for="Specialization"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Description"
+                   class="form-label">
+            </label>
+
+            <textarea asp-for="Description"
+                      class="form-control">
+            </textarea>
+
+        </div>
+
+        <div class="mb-4">
+
+            <label asp-for="Fee"
+                   class="form-label">
+            </label>
+
+            <input asp-for="Fee"
+                   type="number"
+                   class="form-control" />
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-dark">
+
+            Save Doctor
+
+        </button>
+
+    </form>
+
+</div>

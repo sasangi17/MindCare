@@ -25,35 +25,35 @@ namespace MindCare_Pro.Areas.Admin.Controllers
             {
                 con.Open();
 
-                // TOTAL CONSULTATIONS
+                // Total consultations
                 SqlCommand totalCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations", con);
 
                 model.TotalConsultations =
                     (int)totalCmd.ExecuteScalar();
 
-                // PAID CONSULTATIONS
+                // Paid consultation
                 SqlCommand paidCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations WHERE Status='Paid'", con);
 
                 model.PaidConsultations =
                     (int)paidCmd.ExecuteScalar();
 
-                // PENDING CONSULTATIONS
+                // Pending consultation
                 SqlCommand pendingCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations WHERE Status='Pending'", con);
 
                 model.PendingConsultations =
                     (int)pendingCmd.ExecuteScalar();
 
-                // TOTAL REVENUE
+                // Total revenune
                 SqlCommand revenueCmd = new SqlCommand(
                     "SELECT ISNULL(SUM(Fee),0) FROM Consultations WHERE Status='Paid'", con);
 
                 model.TotalRevenue =
                     Convert.ToDecimal(revenueCmd.ExecuteScalar());
 
-                // TODAY REVENUE
+                // Today revenue
                 SqlCommand todayCmd = new SqlCommand(@"
                     SELECT ISNULL(SUM(Fee),0)
                     FROM Consultations
@@ -63,7 +63,7 @@ namespace MindCare_Pro.Areas.Admin.Controllers
                 model.TodayRevenue =
                     Convert.ToDecimal(todayCmd.ExecuteScalar());
 
-                // RECENT CONSULTATIONS
+                // Recent consultations
                 model.RecentConsultations = new List<Consultation>();
 
                 SqlCommand recentCmd = new SqlCommand(@"
