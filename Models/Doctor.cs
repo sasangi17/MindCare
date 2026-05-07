@@ -1,11 +1,21 @@
-﻿namespace MindCare_Pro.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MindCare_Pro.Models
 {
     public class Doctor
     {
         public int DoctorId { get; set; }
-        public string Name { get; set; }
-        public string Specialization { get; set; }
-        public string Description { get; set; }
+
+        [Required]
+        public string? Name { get; set; }
+
+        [Required]
+        public string? Specialization { get; set; }
+
+        [Required]
+        public string? Description { get; set; }
+
+        [Required]
         public decimal Fee { get; set; }
     }
 }
