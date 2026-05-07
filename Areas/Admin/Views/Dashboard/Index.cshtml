@@ -1,2 +1,262 @@
-﻿<h2>Admin Dashboard</h2>
-<p>Welcome Admin 👑</p>
+﻿@model MindCare_Pro.Areas.Admin.Models.AdminDashboardViewModel
+
+<div class="container-fluid">
+
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            Admin Dashboard
+        </h2>
+
+        <p class="text-muted">
+            Welcome back Admin 👋
+        </p>
+
+    </div>
+
+    <div class="row g-4 mb-5">
+
+     
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <h6>Total Consultations</h6>
+
+                <h2>@Model.TotalConsultations</h2>
+
+            </div>
+
+        </div>
+
+    
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <h6>Paid Consultations</h6>
+
+                <h2 class="text-success">
+                    @Model.PaidConsultations
+                </h2>
+
+            </div>
+
+        </div>
+
+      
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <h6>Pending Consultations</h6>
+
+                <h2 class="text-warning">
+                    @Model.PendingConsultations
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- Revenue -->
+        <div class="col-md-3">
+
+            <div class="card dashboard-card">
+
+                <h6>Total Revenue</h6>
+
+                <h2 class="text-primary">
+                    Rs. @Model.TotalRevenue.ToString("N0")
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Today revenue -->
+    <div class="card dashboard-card mb-5">
+
+        <h5 class="fw-bold mb-2">
+            Today's Revenue
+        </h5>
+
+        <h2 class="text-success">
+            Rs. @Model.TodayRevenue.ToString("N0")
+        </h2>
+
+    </div>
+
+
+    <!-- RECENT CONSULTATIONS -->
+    <div class="row g-4">
+
+        <!-- PAID CONSULTATIONS -->
+        <div class="col-md-6">
+
+            <div class="card dashboard-card h-100">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <h5 class="fw-bold mb-0 text-success">
+                        Paid Consultations
+                    </h5>
+
+                    <span class="badge bg-success">
+                        @Model.PaidConsultations
+                    </span>
+
+                </div>
+
+                <table class="table align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Doctor</th>
+                            <th>Fee</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.RecentConsultations
+                                                .Where(x => x.Status == "Paid"))
+                        {
+                            <tr>
+
+                                <td>
+                                    #@item.ConsultationId
+                                </td>
+
+                                <td>
+                                    @item.DoctorName
+                                </td>
+
+                                <td>
+                                    Rs. @item.Fee.ToString("N0")
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-success">
+                                        Paid
+                                    </span>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- PENDING CONSULTATIONS -->
+        <div class="col-md-6">
+
+            <div class="card dashboard-card h-100">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <h5 class="fw-bold mb-0 text-warning">
+                        Pending Consultations
+                    </h5>
+
+                    <span class="badge bg-warning text-dark">
+                        @Model.PendingConsultations
+                    </span>
+
+                </div>
+
+                <table class="table align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Doctor</th>
+                            <th>Fee</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.RecentConsultations
+                                                .Where(x => x.Status.Trim().ToLower() == "pending"))
+                        {
+                            <tr>
+
+                                <td>
+                                    #@item.ConsultationId
+                                </td>
+
+                                <td>
+                                    @item.DoctorName
+                                </td>
+
+                                <td>
+                                    Rs. @item.Fee.ToString("N0")
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    body {
+        background: #f5f7fb;
+    }
+
+    .dashboard-card {
+        border: none;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        background: white;
+    }
+
+        .dashboard-card h6 {
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card h2 {
+            font-weight: bold;
+        }
+
+    table {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+</style>
