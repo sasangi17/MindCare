@@ -32,21 +32,33 @@ namespace MindCare_Pro.Areas.Admin.Controllers
                 model.TotalConsultations =
                     (int)totalCmd.ExecuteScalar();
 
+<<<<<<< HEAD
                 // Paid consultation
+=======
+                // Paid consutations
+>>>>>>> ae8c4f04b7335c6e3d83e185bffd24e6dfebe51e
                 SqlCommand paidCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations WHERE Status='Paid'", con);
 
                 model.PaidConsultations =
                     (int)paidCmd.ExecuteScalar();
 
+<<<<<<< HEAD
                 // Pending consultation
+=======
+                // Pending consultations
+>>>>>>> ae8c4f04b7335c6e3d83e185bffd24e6dfebe51e
                 SqlCommand pendingCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations WHERE Status='Pending'", con);
 
                 model.PendingConsultations =
                     (int)pendingCmd.ExecuteScalar();
 
+<<<<<<< HEAD
                 // Total revenune
+=======
+                // Total revenue
+>>>>>>> ae8c4f04b7335c6e3d83e185bffd24e6dfebe51e
                 SqlCommand revenueCmd = new SqlCommand(
                     "SELECT ISNULL(SUM(Fee),0) FROM Consultations WHERE Status='Paid'", con);
 
