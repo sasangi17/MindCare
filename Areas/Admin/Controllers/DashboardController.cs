@@ -33,7 +33,11 @@ namespace MindCare_Pro.Areas.Admin.Controllers
                     (int)totalCmd.ExecuteScalar();
 
 
+<<<<<<< HEAD
                 // Paid consultation
+=======
+                // Paid consutations
+>>>>>>> 391656a0ac852ba616825d0fac0f2b78c11f7218
 
                 SqlCommand paidCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations WHERE Status='Paid'", con);
@@ -41,8 +45,12 @@ namespace MindCare_Pro.Areas.Admin.Controllers
                 model.PaidConsultations =
                     (int)paidCmd.ExecuteScalar();
 
+<<<<<<< HEAD
 
                 // Pending consultation
+=======
+               // Pending consultations
+>>>>>>> 391656a0ac852ba616825d0fac0f2b78c11f7218
 
                 SqlCommand pendingCmd = new SqlCommand(
                     "SELECT COUNT(*) FROM Consultations WHERE Status='Pending'", con);
@@ -50,7 +58,12 @@ namespace MindCare_Pro.Areas.Admin.Controllers
                 model.PendingConsultations =
                     (int)pendingCmd.ExecuteScalar();
 
+<<<<<<< HEAD
          // Total revenue
+=======
+
+                // Total revenue
+>>>>>>> 391656a0ac852ba616825d0fac0f2b78c11f7218
 
                 SqlCommand revenueCmd = new SqlCommand(
                     "SELECT ISNULL(SUM(Fee),0) FROM Consultations WHERE Status='Paid'", con);
