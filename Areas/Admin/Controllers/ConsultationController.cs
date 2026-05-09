@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MindCare_Pro.Areas.Identity.Data;
 using MindCare_Pro.Data;
 using MindCare_Pro.Models;
 
@@ -12,12 +14,18 @@ namespace MindCare_Pro.Areas.Admin.Controllers
     {
         private readonly MindCareDbContext _context;
 
-        public ConsultationController(MindCareDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public ConsultationController(
+            MindCareDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+
+            _userManager = userManager;
         }
 
-        // List of appoinments
+        // LIST
         public async Task<IActionResult> Index()
         {
             var consultations = await _context.Consultations
@@ -27,7 +35,7 @@ namespace MindCare_Pro.Areas.Admin.Controllers
             return View(consultations);
         }
 
-        // Details of appointment
+        // DETAILS
         public async Task<IActionResult> Details(int id)
         {
             var consultation = await _context.Consultations
@@ -38,10 +46,19 @@ namespace MindCare_Pro.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.FindByIdAsync(
+                consultation.UserId);
+
+            ViewBag.UserName = user?.UserName;
+
+            ViewBag.FirstName = user?.FirstName;
+
+            ViewBag.LastName = user?.LastName;
+
             return View(consultation);
         }
 
-        // Complete consultation
+        // COMPLETE CONSULTATION
         public async Task<IActionResult> Complete(int id)
         {
             var consultation = await _context.Consultations
@@ -63,9 +80,7 @@ namespace MindCare_Pro.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
-        // Delete consultation
+        // DELETE CONSULTATION
         public async Task<IActionResult> Delete(int id)
         {
             var consultation = await _context.Consultations
