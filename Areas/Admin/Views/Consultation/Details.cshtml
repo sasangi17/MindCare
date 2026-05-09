@@ -1,0 +1,85 @@
+﻿@model MindCare_Pro.Models.Consultation
+
+<div class="card border-0 shadow-sm rounded-4 p-4">
+
+    <h2 class="fw-bold mb-4">
+        Consultation Details
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Doctor</strong>
+
+            <p>@Model.DoctorName</p>
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Date</strong>
+
+            <p>@Model.AppointmentDate.ToShortDateString()</p>
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Time Slot</strong>
+
+            <p>@Model.TimeSlot</p>
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Consultation Type</strong>
+
+            <p>@Model.Type</p>
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Fee</strong>
+
+            <p>Rs. @Model.Fee.ToString("N0")</p>
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Status</strong>
+
+            <p>@Model.Status</p>
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <strong>Payment Status</strong>
+
+            <p>
+                @(string.IsNullOrEmpty(Model.PaymentStatus)
+                                ? "Pending"
+                                : Model.PaymentStatus)
+            </p>
+
+        </div>
+
+        <div class="col-12 mb-3">
+
+            <strong>Symptoms</strong>
+
+            <p>
+                @(string.IsNullOrEmpty(Model.Symptoms)
+                                ? "No symptoms added"
+                                : Model.Symptoms)
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

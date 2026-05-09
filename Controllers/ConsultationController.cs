@@ -23,14 +23,16 @@ public class ConsultationController : Controller
         _emailService = emailService;
     }
 
-    // Doctors list
+    // Doctor List
     public IActionResult Index()
     {
         var list = new List<Doctor>();
 
         using (SqlConnection con = new SqlConnection(_conn))
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Doctors", con);
+            SqlCommand cmd = new SqlCommand(
+                "SELECT * FROM Doctors", con);
+
             con.Open();
 
             var reader = cmd.ExecuteReader();
@@ -51,7 +53,7 @@ public class ConsultationController : Controller
         return View(list);
     }
 
-    // Booking page
+    // Book Consultation
     public IActionResult Book(int id)
     {
         var model = new BookingViewModel();
@@ -77,14 +79,18 @@ public class ConsultationController : Controller
 
         model.TimeSlots = new List<string>
         {
-            "09:00 AM","10:00 AM","11:00 AM",
-            "02:00 PM","03:00 PM","04:00 PM"
+            "09:00 AM",
+            "10:00 AM",
+            "11:00 AM",
+            "02:00 PM",
+            "03:00 PM",
+            "04:00 PM"
         };
 
         return View(model);
     }
 
-    //  Send data to payment page
+    // Send data to payment
     [HttpPost]
     public IActionResult Book(BookingViewModel model)
     {
@@ -99,46 +105,105 @@ public class ConsultationController : Controller
         return RedirectToAction("Index", "Payment");
     }
 
+    // Save after payment
     public async Task<IActionResult> SaveAfterPayment()
     {
         var userId = _userManager.GetUserId(User);
 
         int doctorId = int.Parse(TempData["DoctorId"].ToString());
-        DateTime date = DateTime.Parse(TempData["Date"].ToString());
-        string time = TempData["Time"].ToString();
-        decimal fee = decimal.Parse(TempData["Fee"].ToString());
+
         string doctorName = TempData["DoctorName"].ToString();
+
+        DateTime date =
+            DateTime.Parse(TempData["Date"].ToString());
+
+        string time =
+            TempData["Time"].ToString();
+
+        decimal fee =
+            decimal.Parse(TempData["Fee"].ToString());
 
         TempData.Keep();
 
-        // zoom link
-        string zoomLink = "https://plymouth.zoom.us/j/4934069922?pwd=Hb0C4Mt8vv0KrUdXaW48abzgp8BlUc.1&omn=92516386589";
+        // Zoom Link
+        string zoomLink =
+            "https://plymouth.zoom.us/j/4934069922";
 
-        // save consultation to database
+        // Save consultations
         using (SqlConnection con = new SqlConnection(_conn))
         {
             con.Open();
 
             SqlCommand cmd = new SqlCommand(@"
-            INSERT INTO Consultations
-            (DoctorId, UserId, AppointmentDate, TimeSlot, Type, Fee, Status, CreatedAt)
-            VALUES
-            (@DoctorId, @UserId, @Date, @Time, 'Video', @Fee, 'Paid', GETDATE())", con);
+
+INSERT INTO Consultations
+(
+    DoctorId,
+    UserId,
+    DoctorName,
+    AppointmentDate,
+    TimeSlot,
+    Type,
+    Fee,
+    Status,
+    PaymentStatus,
+    Symptoms,
+    IsCompleted,
+    IsCancelled,
+    CreatedAt
+)
+VALUES
+(
+    @DoctorId,
+    @UserId,
+    @DoctorName,
+    @AppointmentDate,
+    @TimeSlot,
+    @Type,
+    @Fee,
+    @Status,
+    @PaymentStatus,
+    @Symptoms,
+    @IsCompleted,
+    @IsCancelled,
+    GETDATE()
+)
+
+", con);
 
             cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+
             cmd.Parameters.AddWithValue("@UserId", userId);
-            cmd.Parameters.AddWithValue("@Date", date);
-            cmd.Parameters.AddWithValue("@Time", time);
+
+            cmd.Parameters.AddWithValue("@DoctorName", doctorName);
+
+            cmd.Parameters.AddWithValue("@AppointmentDate", date);
+
+            cmd.Parameters.AddWithValue("@TimeSlot", time);
+
+            cmd.Parameters.AddWithValue("@Type", "Video");
+
             cmd.Parameters.AddWithValue("@Fee", fee);
+
+            cmd.Parameters.AddWithValue("@Status", "Pending");
+
+            cmd.Parameters.AddWithValue("@PaymentStatus", "Paid");
+
+            cmd.Parameters.AddWithValue("@Symptoms", "");
+
+            cmd.Parameters.AddWithValue("@IsCompleted", false);
+
+            cmd.Parameters.AddWithValue("@IsCancelled", false);
 
             cmd.ExecuteNonQuery();
         }
 
-        // get user email
+        // USER EMAIL
         var user = await _userManager.GetUserAsync(User);
+
         string email = user.Email;
 
-        // email body
+        // EMAIL BODY
         string body = $@"
 <html>
 <head>
@@ -235,44 +300,84 @@ public class ConsultationController : Controller
 </html>
 ";
 
-        // send email
-        _emailService.SendEmail(email, "MindCare Appointment Confirmation", body);
+        // Send email
+        _emailService.SendEmail(
+            email,
+            "MindCare Appointment Confirmation",
+            body);
 
         return RedirectToAction("MyAppointments");
     }
 
-    // my appointments page
+    // User Appointments
     public IActionResult MyAppointments()
     {
         var list = new List<Consultation>();
+
         var userId = _userManager.GetUserId(User);
 
         using (SqlConnection con = new SqlConnection(_conn))
         {
             SqlCommand cmd = new SqlCommand(@"
-                SELECT c.*, d.Name
-                FROM Consultations c
-                JOIN Doctors d ON c.DoctorId = d.DoctorId
-                WHERE c.UserId=@Id
-                ORDER BY c.AppointmentDate DESC", con);
+
+SELECT *
+FROM Consultations
+WHERE UserId=@Id
+ORDER BY AppointmentDate DESC
+
+", con);
 
             cmd.Parameters.AddWithValue("@Id", userId);
 
             con.Open();
+
             var reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
                 list.Add(new Consultation
                 {
-                    ConsultationId = (int)reader["ConsultationId"],
-                    DoctorName = reader["Name"].ToString(),
-                    AppointmentDate = Convert.ToDateTime(reader["AppointmentDate"]),
-                    TimeSlot = reader["TimeSlot"].ToString(),
-                    Type = reader["Type"].ToString(),
-                    Fee = Convert.ToDecimal(reader["Fee"]),
-                    Status = reader["Status"].ToString(),
-                    CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
+                    ConsultationId =
+                        (int)reader["ConsultationId"],
+
+                    DoctorId =
+                        (int)reader["DoctorId"],
+
+                    UserId =
+                        reader["UserId"].ToString(),
+
+                    DoctorName =
+                        reader["DoctorName"].ToString(),
+
+                    AppointmentDate =
+                        Convert.ToDateTime(reader["AppointmentDate"]),
+
+                    TimeSlot =
+                        reader["TimeSlot"].ToString(),
+
+                    Type =
+                        reader["Type"].ToString(),
+
+                    Fee =
+                        Convert.ToDecimal(reader["Fee"]),
+
+                    Status =
+                        reader["Status"].ToString(),
+
+                    PaymentStatus =
+                        reader["PaymentStatus"].ToString(),
+
+                    Symptoms =
+                        reader["Symptoms"].ToString(),
+
+                    IsCompleted =
+                        Convert.ToBoolean(reader["IsCompleted"]),
+
+                    IsCancelled =
+                        Convert.ToBoolean(reader["IsCancelled"]),
+
+                    CreatedAt =
+                        Convert.ToDateTime(reader["CreatedAt"])
                 });
             }
         }
