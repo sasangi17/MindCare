@@ -1,5 +1,223 @@
-﻿<h2>Admin Consultation Management</h2>
+﻿@model List<MindCare_Pro.Models.Consultation>
 
-<p>
-    Manage all appointments here.
-</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-1">
+            Appointment Management
+        </h2>
+
+        <p class="text-muted mb-0">
+            Manage all consultations
+        </p>
+
+    </div>
+
+   
+
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+
+            <h6 class="text-muted">
+                Total Consultations
+            </h6>
+
+            <h3 class="fw-bold">
+                @Model.Count
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+
+            <h6 class="text-muted">
+                Completed
+            </h6>
+
+            <h3 class="fw-bold text-success">
+                @Model.Count(x => x.IsCompleted)
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+
+            <h6 class="text-muted">
+                Pending
+            </h6>
+
+            <h3 class="fw-bold text-warning">
+                @Model.Count(x => !x.IsCompleted)
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow-sm rounded-4 p-3">
+
+            <h6 class="text-muted">
+                Revenue
+            </h6>
+
+            <h3 class="fw-bold text-primary">
+                Rs. @Model.Where(x => x.PaymentStatus == "Paid").Sum(x => x.Fee).ToString("N0")
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Doctor</th>
+
+                        <th>Date</th>
+
+                        <th>Time</th>
+
+                        <th>Type</th>
+
+                        <th>Fee</th>
+
+                        <th>Status</th>
+
+                        <th>Payment</th>
+
+                        <th width="250">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="fw-bold">
+                                    @item.DoctorName
+                                </div>
+
+                            </td>
+
+                            <td>
+                                @item.AppointmentDate.ToShortDateString()
+                            </td>
+
+                            <td>
+                                @item.TimeSlot
+                            </td>
+
+                            <td>
+
+                                <span class="badge bg-info">
+                                    @item.Type
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                Rs. @item.Fee.ToString("N0")
+
+                            </td>
+
+                            <td>
+
+                                @if (item.IsCompleted)
+                                {
+                                    <span class="badge bg-success">
+                                        Completed
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge bg-dark">
+                                    @item.PaymentStatus
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.ConsultationId"
+                                   class="btn btn-primary btn-sm">
+
+                                    View
+
+                                </a>
+
+                                <a asp-action="Complete"
+                                   asp-route-id="@item.ConsultationId"
+                                   class="btn btn-success btn-sm">
+
+                                    Complete
+
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.ConsultationId"
+                                   class="btn btn-danger btn-sm">
+
+                                    Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
