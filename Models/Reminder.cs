@@ -7,5 +7,6 @@
         public string Title { get; set; }
         public DateTime ReminderDate { get; set; }
         public bool IsCompleted { get; set; }
+       
     }
 }
