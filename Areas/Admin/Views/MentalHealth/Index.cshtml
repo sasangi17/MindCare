@@ -1,0 +1,85 @@
+﻿@model List<MindCare_Pro.Models.AdminUserMentalHealthViewModel>
+
+<div class="card shadow-sm border-0 rounded-4 p-4">
+
+    <h2 class="fw-bold mb-4">
+        User Mental Health Reports
+    </h2>
+
+    <table class="table align-middle">
+
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Total Score</th>
+                <th>Condition</th>
+                <th>Last Assessment</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        <strong>
+                            @item.FirstName @item.LastName
+                        </strong>
+                        <br />
+                        <small class="text-muted">
+                            @item.UserName
+                        </small>
+                    </td>
+
+                    <td>
+                        @item.TotalScore
+                    </td>
+
+                    <td>
+
+                        @if (item.CurrentCondition == "Low")
+                        {
+                            <span class="badge bg-success">
+                                Low
+                            </span>
+                        }
+                        else if (item.CurrentCondition == "Moderate")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Moderate
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                Critical
+                            </span>
+                        }
+
+                    </td>
+
+                    <td>
+                        @item.AssessmentDate.ToShortDateString()
+                    </td>
+
+                    <td>
+
+                        <a asp-action="Details"
+                           asp-route-id="@item.UserId"
+                           class="btn btn-dark btn-sm">
+                            View Report
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

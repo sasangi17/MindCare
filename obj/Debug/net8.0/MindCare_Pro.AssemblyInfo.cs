@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MindCare_Pro")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67beacbd13c20dbd44d23117aa13fd120a3c544e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f6d9ac51e2f77f3f0d3824353793cf49fbfa292d")]
 [assembly: System.Reflection.AssemblyProductAttribute("MindCare_Pro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MindCare_Pro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
