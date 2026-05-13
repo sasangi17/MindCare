@@ -34,44 +34,49 @@ namespace MindCare_Pro.Areas.Admin.Controllers
 
 
 
-                // Paid consultation
 
-
+                // Paid consultations
                 SqlCommand paidCmd = new SqlCommand(
-                    "SELECT COUNT(*) FROM Consultations WHERE Status='Paid'", con);
+                    "SELECT COUNT(*) FROM Consultations WHERE PaymentStatus='Paid'", con);
 
                 model.PaidConsultations =
                     (int)paidCmd.ExecuteScalar();
 
 
 
-                // Pending consultation
 
-
+                // Pending consultations
                 SqlCommand pendingCmd = new SqlCommand(
-                    "SELECT COUNT(*) FROM Consultations WHERE Status='Pending'", con);
+                    "SELECT COUNT(*) FROM Consultations WHERE PaymentStatus='Pending'", con);
 
                 model.PendingConsultations =
                     (int)pendingCmd.ExecuteScalar();
 
 
 
-         // Total revenue
+
+                // Total revenue
                 SqlCommand revenueCmd = new SqlCommand(
-                    "SELECT ISNULL(SUM(Fee),0) FROM Consultations WHERE Status='Paid'", con);
+                    "SELECT ISNULL(SUM(Fee),0) FROM Consultations WHERE PaymentStatus='Paid'", con);
 
                 model.TotalRevenue =
                     Convert.ToDecimal(revenueCmd.ExecuteScalar());
+
+
+
 
                 // Today revenue
                 SqlCommand todayCmd = new SqlCommand(@"
                     SELECT ISNULL(SUM(Fee),0)
                     FROM Consultations
-                    WHERE Status='Paid'
+                    WHERE PaymentStatus='Paid'
                     AND CAST(CreatedAt AS DATE)=CAST(GETDATE() AS DATE)", con);
 
                 model.TodayRevenue =
                     Convert.ToDecimal(todayCmd.ExecuteScalar());
+
+
+
 
                 // Recent consultations
                 model.RecentConsultations = new List<Consultation>();
@@ -106,6 +111,9 @@ namespace MindCare_Pro.Areas.Admin.Controllers
 
                         Status =
                             reader["Status"].ToString(),
+
+                        PaymentStatus =
+                            reader["PaymentStatus"].ToString(),
 
                         CreatedAt =
                             Convert.ToDateTime(reader["CreatedAt"])

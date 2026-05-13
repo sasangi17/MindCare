@@ -125,7 +125,7 @@
                     <tbody>
 
                         @foreach (var item in Model.RecentConsultations
-                                                .Where(x => x.Status == "Paid"))
+                                                .Where(x => x.PaymentStatus == "Paid"))
                         {
                             <tr>
 
@@ -191,7 +191,7 @@
                     <tbody>
 
                         @foreach (var item in Model.RecentConsultations
-                                                .Where(x => x.Status.Trim().ToLower() == "pending"))
+                                                .Where(x => x.PaymentStatus.Trim().ToLower() == "pending"))
                         {
                             <tr>
 
