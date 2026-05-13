@@ -18,7 +18,7 @@ public class ReminderController : Controller
         _userManager = userManager;
     }
 
-    
+
     public IActionResult Index()
     {
         var list = new List<Reminder>();

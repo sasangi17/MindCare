@@ -1,4 +1,4 @@
-﻿namespace MindCare_Pro.Areas.Admin.Models
+﻿namespace MindCare_Pro.Models
 {
     public class AdminUserMentalHealthViewModel
     {

@@ -23,6 +23,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 builder.Services.AddScoped<EmailService>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
