@@ -22,6 +22,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
 });
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddHostedService<ReminderEmailBackgroundService>();
 
 
 var app = builder.Build();
