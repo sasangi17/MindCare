@@ -2,9 +2,7 @@
 
 ## 📖 Overview
 
-MindCare is a web-based mental health management system developed as a Final Year Project for the BSc (Hons) Computer Science degree at Plymouth University.
-
-The system aims to provide an integrated platform that supports mental health assessment, consultation booking, reminder management, and progress tracking within a single environment.
+MindCare is a web-based mental health management system.The system aims to provide an integrated platform that supports mental health assessment, consultation booking, reminder management and progress tracking within a single environment.
 
 Mental health challenges such as stress, anxiety, and depression are increasingly common among students and working professionals. MindCare helps users monitor their mental well-being while improving accessibility to professional support services.
 
